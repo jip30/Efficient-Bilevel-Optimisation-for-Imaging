@@ -12,9 +12,8 @@ function [alpha_hat, L_hat, alphahist, Lhist, acchist,t,gradhist] = solve_upper_
         % lower_maxiter : max iterations for the lower level GD
         % lower_tol : tolerance for the lower level GD
         % gmresmaxiter : max iterations for solving linear system by GMRES
-        % cgstol : tolerance for solving linear system by CG
-        % maxiter : max iterations for the (upper level) GD
         % beta: backtracking parameter
+        % maxiter : max iterations for the (upper level) GD
         % tol : tolerance for the (upper level) GD
     % OUTPUT:
         % alpha_hat: optimal alpha (the value at which the obj function is minimised)

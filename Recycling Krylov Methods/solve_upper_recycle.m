@@ -12,7 +12,6 @@ function [alpha_hat, L_hat, alphahist, Lhist, acchist,V_recycle,H_recycle,t,grad
         % lower_maxiter : max iterations for the lower level GD
         % lower_tol : tolerance for the lower level GD
         % gmresmaxiter : max iterations for solving linear system by GMRES
-        % cgstol : tolerance for solving linear system by CG
         % maxiter : max iterations for the (upper level) GD
         % beta: backtracking parameter
         % tol : tolerance for the (upper level) GD
