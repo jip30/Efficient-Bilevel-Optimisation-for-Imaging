@@ -1,0 +1,38 @@
+function [val,grad] = L_tv_approx(u_star,y,B,theta,delta1,delta2)
+
+% Compute val=L(u_hat(lambda)) and grad=\nabla L(u_hat(lambda)) with
+% TV+Tikhonov regularisation using approximate (lower-level / linear system) solutions
+
+n = numel(u_star);
+
+% Finite difference operator
+A = diag([-1 * ones(1,n-1) 0]) + diag(ones(1,n-1), 1);
+
+% Lipschitz and convexity constants
+normA = 2;
+normB = normest(B);
+L = normB^2 + theta(1) * normA * (2/0.002) * normA + theta(2); % gamma=0.002
+mu = normB^2 + theta(2);
+
+% solve lower level problem to delta1 accuracy
+E_fun = @(u) E_tv(u,y,B,theta);
+u0 = zeros(n,1);
+tol = delta1^2;
+maxiter = 50000;
+u_hat = gd_convex(E_fun,u0,L,mu,tol,maxiter);
+
+% upper level objective
+val = 0.5 * norm(u_hat-u_star)^2;
+
+% grad of upper level objective
+[~, drAuhat, ddrAuhat] = rho(A*u_hat);
+
+
+DalphauE = (A'*drAuhat)';
+tildePhi = -[DalphauE; u_hat'];
+tildeH = B'*B + theta(1)*A'*diag(ddrAuhat)*A + theta(2)*eye(n);
+tildeb = u_hat - u_star;
+tildew = cgs(tildeH, tildeb, delta2, 50); 
+grad = tildePhi * tildew;
+
+end
